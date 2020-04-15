@@ -1,0 +1,49 @@
+---
+# 参考: https://qiita.com/ksugawara61/items/ba9a51ebfdaf8d1a1b48
+- name: Install required packages.
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - gcc
+      - zlib-devel
+      - bzip2
+      - bzip2-devel
+      - readline
+      - readline-devel
+      - sqlite
+      - sqlite-devel
+      - openssl
+      - openssl-devel
+      # - git   # git はyumでインストールしない
+      - libffi-devel
+  become: yes
+
+- name: Get pyenv.
+  git:
+    repo: "https://github.com/pyenv/pyenv.git"
+    dest: "{{ pyenv_dest_dir }}"
+    version: "{{ pyenv_version }}"
+
+- name: Override run command.
+  blockinfile:
+    marker: "# {mark} ansible managed block - pyenv"
+    marker_begin: "begin"
+    marker_end: "end  "
+    create: yes
+    mode: "0644"
+    owner: centos
+    path: "{{ run_command_path }}"
+    block: |
+      export PYENV_ROOT="$HOME/.pyenv"
+      export PATH="$PYENV_ROOT/bin:$PATH"
+      if command -v pyenv 1>/dev/null 2>&1; then
+        eval "$(pyenv init -)"
+      fi
+
+- name: Install python.
+  shell: "{{ pyenv_dest_dir }}/bin/pyenv install {{ item }}"
+  with_items: "{{ install_python_versions }}"
+
+- name: Set pyenv global.
+  shell: "{{ pyenv_dest_dir }}/bin/pyenv global system {{ main_python_version }}"

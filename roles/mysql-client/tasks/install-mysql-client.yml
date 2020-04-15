@@ -1,0 +1,26 @@
+---
+- name: Add mysql rpm.
+  yum:
+    name: http://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+    state: present
+  become: yes
+
+- name: Install required packages.
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - yum-utils
+  become: yes
+
+- name: Enable mysql57.
+  shell: |
+    yum-config-manager --disable mysql80-community
+    yum-config-manager --enable mysql57-community
+  become: yes
+
+- name: Install mysql-client.
+  yum:
+    name: mysql-community-client
+    state: latest
+  become: yes

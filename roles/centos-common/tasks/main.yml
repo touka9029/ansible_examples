@@ -1,0 +1,11 @@
+---
+- name: Update yum.
+  yum:
+    name: '*'
+    state: latest
+  become: yes
+
+- name: Set timezone to Asia/Tokyo.
+  timezone:
+    name: Asia/Tokyo
+  become: yes

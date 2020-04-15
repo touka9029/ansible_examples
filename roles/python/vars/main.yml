@@ -1,0 +1,10 @@
+---
+pyenv_dest_dir: /home/centos/.pyenv
+poetry_dest_dir: /usr/local/src/poetry
+pyenv_version: v1.2.18
+run_command_path: /home/centos/.zshrc
+install_python_versions:
+  - "3.8.2"
+  - "3.7.7"
+# mainだが、systemの次
+main_python_version: "3.8.2"

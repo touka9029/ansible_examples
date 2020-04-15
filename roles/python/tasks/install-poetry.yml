@@ -1,0 +1,53 @@
+---
+- name: Create temporary directory.
+  file:
+    path: "{{ poetry_dest_dir }}"
+    state: directory
+    mode: "0755"
+  become: yes
+
+- name: Get poetry.
+  get_url:
+    url: "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"
+    dest: "{{ poetry_dest_dir }}/get-poetry.py"
+    mode: "0644"
+  become: yes
+
+- name: Install poetry.
+  shell: "python {{ poetry_dest_dir }}/get-poetry.py"
+
+- name: Set poetry path.
+  blockinfile:
+    marker: "# {mark} ansible managed block - poetry"
+    marker_begin: "begin"
+    marker_end: "end  "
+    create: yes
+    mode: "0644"
+    owner: centos
+    path: "{{ run_command_path }}"
+    block: |
+      export PATH="$HOME/.poetry/bin:$PATH"
+
+# completions
+- name: Create completions directory
+  file:
+    path: "/home/centos/.zfunc"
+    state: directory
+    mode: "0755"
+
+- name: Write zshrc.
+  blockinfile:
+    marker: "# {mark} ansible managed block - poetry_completions"
+    marker_begin: "begin"
+    marker_end: "end  "
+    create: yes
+    mode: "0644"
+    owner: centos
+    path: "{{ run_command_path }}"
+    block: |
+      fpath+=~/.zfunc
+
+- name: Run completions script.
+  shell: "./poetry completions zsh > ~/.zfunc/_poetry"
+  args:
+    chdir: "/home/centos/.poetry/bin"

@@ -1,0 +1,19 @@
+---
+- name: Install required packages.
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - unzip
+  become: yes
+
+- name: Get awscli package.
+  unarchive:
+    src: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+    dest: "{{ dest_dir }}"
+    remote_src: yes
+  become: yes
+
+- name: Install awscli.
+  shell: "{{ dest_dir }}/aws/install --update"
+  become: yes
