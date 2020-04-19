@@ -11,6 +11,7 @@
 - name: Install required python packages.
   pip:
     name: pexpect
+  become: yes
 
 - name: Create temporary directory.
   file:
