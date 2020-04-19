@@ -2,5 +2,29 @@
 - name: Get mattermost.
   git:
     repo: "https://github.com/mattermost/mattermost-docker.git"
-    dest: /home/centos/mattermost-docker
+    dest: "{{ git_clone_dir }}"
     version: "master"
+
+- name: Build docker image.
+  shell: docker-compose build
+  args:
+    chdir: "{{ git_clone_dir }}"
+
+- name: Make mount directories.
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: 2000
+    group: 2000
+  with_items:
+    - "{{ git_clone_dir }}/volumes/app/mattermost"
+    - "{{ git_clone_dir }}/volumes/app/mattermost/data"
+    - "{{ git_clone_dir }}/volumes/app/mattermost/logs"
+    - "{{ git_clone_dir }}/volumes/app/mattermost/config"
+    - "{{ git_clone_dir }}/volumes/app/mattermost/plugins"
+    - "{{ git_clone_dir }}/volumes/app/mattermost/client-plugins"
+
+- name: Start docker-compose.
+  shell: docker-compose up -d
+  args:
+    chdir: "{{ git_clone_dir }}"
