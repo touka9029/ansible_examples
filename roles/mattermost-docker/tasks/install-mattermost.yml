@@ -35,6 +35,7 @@
     - "{{ git_clone_dir }}/volumes/app/mattermost/config"
     - "{{ git_clone_dir }}/volumes/app/mattermost/plugins"
     - "{{ git_clone_dir }}/volumes/app/mattermost/client-plugins"
+  become: yes
 
 - name: Start docker-compose.
   shell: docker-compose up -d
