@@ -1,0 +1,6 @@
+---
+- name: Get mattermost.
+  git:
+    repo: "https://github.com/mattermost/mattermost-docker.git"
+    dest: /home/centos/mattermost-docker
+    version: "5.21.0"
