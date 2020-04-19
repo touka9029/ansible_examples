@@ -1,0 +1,4 @@
+---
+- include_tasks: "create-certificate.yml"
+  vars:
+    create_dir: /home/centos/tmp

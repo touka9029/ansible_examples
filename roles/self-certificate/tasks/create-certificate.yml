@@ -1,0 +1,38 @@
+---
+- name: Install required packages.
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - openssl
+  become: yes
+
+- name: Create temporary directory.
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ create_dir }}"
+
+- name: Create secret key.
+  shell: "openssl genrsa -out {{ create_dir }}/server.key 2048"
+
+- name: Create certificate signing request (CSR).
+  expect:
+    command: "openssl req -new -key {{ create_dir }}/server.key -out {{ create_dir }}/server.csr"
+    response:
+      "Country Name (2 letter code) [XX]:": "JP"
+      "State or Province Name (full name) []:": "Tokyo"
+      "Locality Name (eg, city) [Default City]:": ""
+      "Organization Name (eg, company) [Default Company Ltd]:": ""
+      "Organizational Unit Name (eg, section) []:": ""
+      "Common Name (eg, your name or your server's hostname) []:": "{{ hostname }}"
+      "Email Address []:": ""
+      "A challenge password []:": ""
+      "An optional company name []:": ""
+  vars:
+    # TODO ホスト名は実行環境に合わせて書き換える
+    hostname: "52.192.10.182"
+
+- name: Create CRT.
+  shell: "openssl x509 -days 3650 -req -signkey {{ create_dir }}/server.key -in {{ create_dir }}/server.csr -out {{ create_dir }}/server.crt"
