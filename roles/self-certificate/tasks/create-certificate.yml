@@ -5,7 +5,12 @@
   vars:
     packages:
       - openssl
+      - python-pip
   become: yes
+
+- name: Install required python packages.
+  pip:
+    name: pexpect
 
 - name: Create temporary directory.
   file:
