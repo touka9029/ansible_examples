@@ -40,6 +40,20 @@
       - containerd.io
   become: yes
 
+- name: Start docker service.
+  service:
+    name: docker
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Add user centos to docker group
+  user:
+    name: centos
+    groups: docker
+    append: yes
+  become: yes
+
 - name: Get docker-compose.
   get_url:
     url: "https://github.com/docker/compose/releases/download/{{ compose_version }}/docker-compose-Linux-x86_64"
