@@ -10,12 +10,24 @@
   args:
     chdir: "{{ git_clone_dir }}"
 
+- name: Add mattermost group.
+  group:
+    name: mattermost
+    gid: 2000
+    state: present
+
+- name: Add mattermost user.
+  user:
+    name: mattermost
+    uid: 2000
+    group: mattermost
+
 - name: Make mount directories.
   file:
     path: "{{ item }}"
     state: directory
-    owner: 2000
-    group: 2000
+    owner: mattermost
+    group: mattermost
   with_items:
     - "{{ git_clone_dir }}/volumes/app/mattermost"
     - "{{ git_clone_dir }}/volumes/app/mattermost/data"
