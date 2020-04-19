@@ -15,12 +15,14 @@
     name: mattermost
     gid: 2000
     state: present
+  become: yes
 
 - name: Add mattermost user.
   user:
     name: mattermost
     uid: 2000
     group: mattermost
+  become: yes
 
 - name: Make mount directories.
   file:
