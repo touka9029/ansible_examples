@@ -37,8 +37,8 @@
       "A challenge password": ""
       "An optional company name": ""
   vars:
-    # TODO ホスト名は実行環境に合わせて書き換える
-    hostname: "52.192.10.182"
+    # TODO ホスト名は実行環境に合わせて書き換える。IPでも良さそう
+    hostname: "example.com"
 
 - name: Create CRT.
   shell: "openssl x509 -days 3650 -req -signkey {{ create_dir }}/server.key -in {{ create_dir }}/server.csr -out {{ create_dir }}/server.crt"
