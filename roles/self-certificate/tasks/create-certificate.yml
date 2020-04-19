@@ -20,7 +20,7 @@
 - name: Create certificate signing request (CSR).
   expect:
     command: "openssl req -new -key {{ create_dir }}/server.key -out {{ create_dir }}/server.csr"
-    response:
+    responses:
       "Country Name (2 letter code) [XX]:": "JP"
       "State or Province Name (full name) []:": "Tokyo"
       "Locality Name (eg, city) [Default City]:": ""
