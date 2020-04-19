@@ -1,0 +1,51 @@
+---
+# docs: https://docs.docker.com/engine/install/centos/
+- name: Uninstall old versions.
+  yum:
+    name: "{{ packages }}"
+    state: absent
+  vars:
+    packages:
+      - docker
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+      - docker-engine
+  become: yes
+
+- name: Install required packages.
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - yum-utils
+  become: yes
+
+- name: Set up the repository.
+  yum:
+    name: https://download.docker.com/linux/centos/docker-ce.repo
+  become: yes
+
+- name: Install docker engine.
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+  become: yes
+
+- name: Get docker-compose.
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ compose_version }}/docker-compose-Linux-x86_64"
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'
+  vars:
+    compose_version: "1.25.5"
+  become: yes
+
+

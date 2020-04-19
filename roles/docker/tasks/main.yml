@@ -1,0 +1,19 @@
+---
+- include_tasks: "install-docker.yml"
+
+# 確認
+- name: Installed docker version.
+  shell: "docker --version"
+  register: debug_docker_version
+
+- name: Debug docker version.
+  debug:
+    msg: "{{ debug_docker_version.stdout }}"
+
+- name: Installed docker-compose version.
+  shell: "docker-compose --version"
+  register: debug_docker_compose_version
+
+- name: Debug docker-compose version.
+  debug:
+    msg: "{{ debug_docker_compose_version.stdout }}"
