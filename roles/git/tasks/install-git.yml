@@ -1,4 +1,10 @@
 ---
+- name: Uninstall git by yum.
+  yum:
+    name: git
+    state: absent
+  become: yes
+
 - name: Install required packages.
   yum:
     name: "{{ packages }}"
