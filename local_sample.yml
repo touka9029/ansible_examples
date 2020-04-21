@@ -4,6 +4,4 @@
   roles:
     - name: common
     - name: timezone
-      vars:
-        timezone: Asia/Tokyo
     - name: git
